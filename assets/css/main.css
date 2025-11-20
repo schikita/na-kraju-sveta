@@ -1321,6 +1321,9 @@ body {
 
 /*   КАРУСЕЛЬ ПРОЕКТОВ  */
 .projects-section {
+  background:  url('../img/bg-prog.JPG');
+  background-repeat: no-repeat;
+  background-size:cover;
   position: relative;
   width: 100%;
   padding-block: clamp(24px, 4vw, 48px);
@@ -1395,7 +1398,8 @@ body {
     rgba(0, 0, 0, 0.15) 0%,
     rgba(0, 0, 0, 0.55) 60%,
     rgba(0, 0, 0, 0.75) 100%
-  );
+  )
+ ;
   opacity: 1;
   transform: none;
   transition: none;
