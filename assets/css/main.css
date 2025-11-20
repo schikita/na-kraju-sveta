@@ -427,7 +427,7 @@ body {
 .hero__subtitle {
   font-size: 18px;
   max-width: 420px;
-  color: #b3b3b3;
+  color: #ffffff;
   margin-bottom: 24px;
   animation: slideInLeft 0.8s ease-out 0.1s both;
 }
