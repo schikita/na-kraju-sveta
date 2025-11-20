@@ -1997,3 +1997,10 @@ a.yt-inline-link {
     background-size: cover;
     background-position: center;
 }
+
+.lazy-bg {
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #020617; /* запасной цвет до загрузки */
+}
