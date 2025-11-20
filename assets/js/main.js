@@ -191,4 +191,163 @@ function setVH() {
 setVH();
 window.addEventListener("resize", setVH);
 
-console.log("✨ Polar Journal Scripts Loaded Successfully");
+
+// ===============================
+// КАРУСЕЛЬ ПРОЕКТОВ
+// ===============================
+(function setupProjectsCarousel() {
+  const viewport = document.querySelector('#projects .projects-viewport');
+  if (!viewport) return;
+
+  const stage = viewport.querySelector('.projects-stage');
+  const cards = [...stage.querySelectorAll('.project-card')];
+  if (!cards.length) return;
+
+  const dotsWrap = viewport.querySelector('.pr-dots');
+  const prevBtn = viewport.querySelector('.prev');
+  const nextBtn = viewport.querySelector('.next');
+
+  let i = 0, timer = null;
+  const interval = +(viewport.dataset.interval || 5000);
+  const autoplay = viewport.dataset.autoplay !== 'false';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  dotsWrap.innerHTML = cards.map(() => '<i></i>').join('');
+  const dots = [...dotsWrap.children];
+
+  const show = (idx) => {
+    i = (idx + cards.length) % cards.length;
+    cards.forEach((c, k) => c.classList.toggle('is-active', k === i));
+    dots.forEach((d, k) => d.classList.toggle('is-on', k === i));
+  };
+
+  const next = () => show(i + 1);
+  const prev = () => show(i - 1);
+  const stop = () => { if (timer) clearInterval(timer); };
+  const play = () => {
+    if (reduce || !autoplay) return;
+    stop();
+    timer = setInterval(next, interval);
+  };
+
+  show(0);
+  play();
+
+  nextBtn?.addEventListener('click', () => { next(); play(); });
+  prevBtn?.addEventListener('click', () => { prev(); play(); });
+  dotsWrap.addEventListener('click', (e) => {
+    const idx = dots.indexOf(e.target);
+    if (idx > -1) { show(idx); play(); }
+  });
+
+  viewport.addEventListener('mouseenter', stop);
+  viewport.addEventListener('mouseleave', play);
+  viewport.addEventListener('focusin', stop);
+  viewport.addEventListener('focusout', play);
+
+  // Авто-пауза, когда секция ушла с экрана
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.target !== viewport) return;
+
+      if (entry.isIntersecting) {
+        play();
+      } else {
+        stop();
+      }
+    });
+  }, { threshold: 0.2 });
+
+  sectionObserver.observe(viewport);
+})();
+
+
+// SLIDER
+
+document.addEventListener('DOMContentLoaded', () => {
+    const sliders = document.querySelectorAll('.photo-slider');
+
+    sliders.forEach(slider => {
+        const track   = slider.querySelector('.slider-track');
+        const slides  = Array.from(track.querySelectorAll('img'));
+        const prevBtn = slider.querySelector('.slider-btn.prev');
+        const nextBtn = slider.querySelector('.slider-btn.next');
+
+        if (!track || slides.length <= 1) return;
+
+        let index = 0;
+
+        function goTo(i) {
+            index = (i + slides.length) % slides.length;
+            track.style.transform = `translateX(-${index * 100}%)`;
+        }
+
+        // Клики по стрелкам
+        prevBtn?.addEventListener('click', () => goTo(index - 1));
+        nextBtn?.addEventListener('click', () => goTo(index + 1));
+
+        goTo(0);
+
+        // ====== СВАЙП ДЛЯ МОБИЛЬНЫХ / ПЛАНШЕТОВ ======
+        let startX = 0;
+        let startY = 0;
+        let isSwiping = false;
+
+        const SWIPE_THRESHOLD = 50; // минимальное смещение по X для свайпа, px
+
+        function getPoint(e) {
+            if (e.touches && e.touches[0]) return e.touches[0];
+            if (e.changedTouches && e.changedTouches[0]) return e.changedTouches[0];
+            return e;
+        }
+
+        function onTouchStart(e) {
+            // Ограничим свайп на ширинах до 1024px (планшет+мобила)
+            if (window.innerWidth > 1024) return;
+
+            const p = getPoint(e);
+            startX = p.clientX;
+            startY = p.clientY;
+            isSwiping = true;
+        }
+
+        function onTouchMove(e) {
+            if (!isSwiping) return;
+            const p = getPoint(e);
+
+            const dx = p.clientX - startX;
+            const dy = p.clientY - startY;
+
+            // Если жест больше по вертикали — даём странице скроллиться
+            if (Math.abs(dy) > Math.abs(dx)) return;
+
+            // Горизонтальный свайп — можно чуть заблокировать скролл страницы
+            if (Math.abs(dx) > 10) {
+                e.preventDefault();
+            }
+        }
+
+        function onTouchEnd(e) {
+            if (!isSwiping) return;
+            isSwiping = false;
+
+            const p = getPoint(e);
+            const dx = p.clientX - startX;
+
+            if (Math.abs(dx) < SWIPE_THRESHOLD) return;
+
+            if (dx < 0) {
+                // свайп влево → следующий
+                goTo(index + 1);
+            } else {
+                // свайп вправо → предыдущий
+                goTo(index - 1);
+            }
+        }
+
+        slider.addEventListener('touchstart', onTouchStart, { passive: true });
+        slider.addEventListener('touchmove', onTouchMove, { passive: false });
+        slider.addEventListener('touchend', onTouchEnd);
+        slider.addEventListener('touchcancel', onTouchEnd);
+    });
+});
