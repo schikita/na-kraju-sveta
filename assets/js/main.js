@@ -19,7 +19,7 @@
 
     const hidePreloader = () => {
       if (!preloader) return;
-      preloader.classList.add('preloader--hidden');
+      preloader.classList.add('hidden');
       setTimeout(() => {
         if (preloader && preloader.parentNode) {
           preloader.parentNode.removeChild(preloader);

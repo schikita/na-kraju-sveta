@@ -149,51 +149,148 @@ body {
   }
 }
 
-/* BACK TO TOP BUTTON */
+
+/* BACK TO TOP BUTTON — Антарктида + стрелка */
 
 .back-to-top {
+  z-index: 1000;
   position: fixed;
   bottom: 32px;
   right: 32px;
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), #ea580c);
-  border: none;
+  border: 1px solid rgba(148, 163, 184, 0.55);
+  background: radial-gradient(circle at 30% 20%, #e0f2fe 0, #0284c7 40%, #020617 85%);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.9);
   cursor: pointer;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  z-index: 100;
+
   opacity: 0;
   visibility: hidden;
   transform: translateY(20px);
-  transition: all var(--transition);
-  box-shadow: 0 8px 24px rgba(249, 115, 22, 0.3);
+
+  transition:
+    opacity var(--transition),
+    visibility var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition),
+    background 0.25s ease-out;
 }
 
-.back-to-top:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(249, 115, 22, 0.5);
-  background: linear-gradient(135deg, #ea580c, var(--accent));
-}
-
-.back-to-top:active {
-  transform: translateY(0);
-}
-
+/* показать кнопку (как у тебя в JS) */
 .back-to-top.show {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
 }
 
-.back-to-top svg {
-  width: 24px;
-  height: 24px;
-  stroke: currentColor;
+.back-to-top:hover {
+  box-shadow: 0 16px 38px rgba(15, 23, 42, 0.95);
+  background: radial-gradient(circle at 30% 20%, #e0f2fe 0, #0ea5e9 45%, #020617 90%);
 }
+
+/* внутренние слои */
+
+.back-to-top__icon,
+.back-to-top__arrow {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Антарктида (белое "пятно"-континент) */
+.back-to-top__icon {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* твой PNG */
+  background-image: url("../img/polar-top.png"); /* путь под себя */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+
+
+
+
+/* Стрелка вверх — появляется при наведении */
+.back-to-top__arrow {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  font-size: 20px;
+  line-height: 1;
+  color: #f9fafb;
+}
+
+/* Ховер: прячем Антарктиду, показываем стрелку */
+.back-to-top:hover .back-to-top__icon {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.back-to-top:hover .back-to-top__arrow {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Адаптив под твои брейкпоинты */
+
+@media (max-width: 768px) {
+  .back-to-top {
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .back-to-top__icon,
+  .back-to-top__arrow {
+    width: 24px;
+    height: 24px;
+  }
+
+  .back-to-top__arrow {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .back-to-top {
+    bottom: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .back-to-top__icon,
+  .back-to-top__arrow {
+    width: 22px;
+    height: 22px;
+  }
+
+  .back-to-top__arrow {
+    font-size: 16px;
+  }
+}
+
+
 
 /* BASE */
 
