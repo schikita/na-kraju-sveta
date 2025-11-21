@@ -2101,3 +2101,47 @@ a.yt-inline-link {
     background-repeat: no-repeat;
     background-color: #020617; /* запасной цвет до загрузки */
 }
+
+
+.author {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px 6px 8px;
+  border-radius: 999px;
+  background: radial-gradient(circle at top left, #0a2975 0%, #0a27ac 65%);
+  border: 0px solid rgba(148, 163, 184, 0.45);
+  color: #f9fafb;
+  font-size: 14px;
+  line-height: 1;
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease,
+    color 0.25s ease;
+}
+
+
+
+.author:hover {
+  background: radial-gradient(circle at top left, #ffffff 0%, #ffffff 70%);
+  text-shadow: none;
+  border-color: rgba(249, 115, 22, 0.8);
+  color: #0a2975;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.363);
+}
+
+.author:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+}
+
+.author:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
